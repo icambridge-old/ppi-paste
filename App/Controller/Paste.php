@@ -45,7 +45,13 @@ class APP_Controller_Paste extends PPI_Controller {
 			return;	
 		}
 		
-		$this->load('paste/view', (array) $objCouch->getDoc($docId));
+		try {			
+			$this->load('paste/view', (array) $objCouch->getDoc($docId));
+		} catch ( Exception $e ) {			
+			$this->load("paste/nopaste");
+			return;	
+		}
+		
 		
 		
 	}
