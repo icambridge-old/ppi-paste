@@ -39,6 +39,12 @@ class APP_Controller_Paste extends PPI_Controller {
 		$objCouch = $this->_getCouch();
 
 		$docId = $this->get('id');	
+		
+		if ( !$docId ){
+			$this->load("paste/nopaste");
+			return;	
+		}
+		
 		$this->load('paste/view', (array) $objCouch->getDoc($docId));
 		
 		
