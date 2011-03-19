@@ -2,7 +2,7 @@
 class APP_Controller_Paste extends PPI_Controller {
 
 	public function index() {
-		
+		$this->redirect("");
 	}
 	
 	
