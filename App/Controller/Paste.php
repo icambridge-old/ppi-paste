@@ -1,34 +1,46 @@
 <?php
 class APP_Controller_Paste extends PPI_Controller {
 
-	public function index() {
+	protected function _getCouch(){
+		
+		$objConfig = $this->getConfig();
+		$objCouch = new couchClient("http://".$objConfig->db->username.":".
+									$objConfig->db->password."@".$objConfig->db->host.":".$objConfig->db->port."/",
+									$objConfig->db->dbname);
+						
+		return $objCouch;					
+	}
+
+	function index() {
 		$this->redirect("");
 	}
 	
 	
-	public function submit(){
+	function submit(){
 	
-		// Not a post therefore fuck off :D
 		if ( !$this->isPost() ) {
-			$this->redirect("Error/nopost");	
+			$this->redirect("error/nopost");	
 		}
 		
 		$pasteValues = (object)$this->stripPost("paste_");
-		$objConfig = $this->getConfig();
+		$objCouch = $this->_getCouch();
 		
-		$objCouch = new couchClient("http://".$objConfig->db->username.":".
-									$objConfig->db->password."@".$objConfig->db->host.":".$objConfig->db->port."/",
-									$objConfig->db->dbname);
 		try {							
 			$objResponse = $objCouch->storeDoc($pasteValues);
-			$this->redirect("Paste/View/".$objResponse->id);
+			$this->redirect("paste/view/id/".$objResponse->id);
 		} catch ( Exception $e ) {			
-			$this->redirect("Error/fail");	
+			$this->redirect("error/fail");	
 		}	
 		
 	}	
 	
-	public function view(){
+	function view(){
+		
+		$objCouch = $this->_getCouch();
+
+		$docId = $this->get('id');	
+		$this->load('paste/view', (array) $objCouch->getDoc($docId));
+		
 		
 	}
 	
