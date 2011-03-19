@@ -10,7 +10,7 @@
 	<body  onload="prettyPrint()">
 		<div id="body">
 			<div id="header">
-				<h1>Pastes - p.iain.at</h1>
+				<a href="<?php echo $baseUrl; ?>"><h1>Pastes - p.iain.at</h1></a>
 			</div>
 			<div id="content">
 				<?php include_once($viewDir . $actionFile); ?>
