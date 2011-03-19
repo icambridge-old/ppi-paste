@@ -1,3 +1,1 @@
-<code language="<?php echo $syntax; ?>">
-	<?php echo nl2br(htmlspecialchars($content,ENT_QUOTES)); ?>
-</code>
+<pre id="paste" class="prettyprint lang-<?php echo $syntax; ?> linenums"><?php echo trim(htmlspecialchars($content,ENT_QUOTES)); ?></pre>
