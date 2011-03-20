@@ -22,10 +22,22 @@ class APP_Controller_Paste extends PPI_Controller {
 			$this->redirect("error/nopost");	
 		}
 		
+		$objConfig = $this->getConfig();
 		$pasteValues = (object)$this->stripPost("paste_");
 		$objCouch = $this->_getCouch();
 		
-		try {							
+		
+		
+		try {
+											
+			if ( !preg_match('~^'.$this->getConfig()->system->base_url.'~isU',$_SERVER['HTTP_REFERER'])  ) {
+				throw new Exception("Wrong referer");
+			}
+			
+			if ( $pasteValues->content == "" ){				
+				throw new Exception("No paste");
+			}
+			
 			$objResponse = $objCouch->storeDoc($pasteValues);
 			$this->redirect("paste/view/id/".$objResponse->id);
 		} catch ( Exception $e ) {			
@@ -46,7 +58,7 @@ class APP_Controller_Paste extends PPI_Controller {
 		}
 		
 		try {			
-			$this->load('paste/view', (array) $objCouch->getDoc($docId,true));
+			$this->load('paste/view', (array) $objCouch->revs()->getDoc($docId));
 		} catch ( Exception $e ) {			
 			$this->load("paste/nopaste");
 			return;	
